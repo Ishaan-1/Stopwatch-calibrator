@@ -1,0 +1,6 @@
+debug/
+Release/
+*.elf
+*.bin
+*.map
+.lst
