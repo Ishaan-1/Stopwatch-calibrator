@@ -4,3 +4,9 @@ Release/
 *.bin
 *.map
 .lst
+.settings/
+.cproject
+.mxproject
+.project
+*.ld
+*.ioc
