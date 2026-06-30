@@ -8,5 +8,4 @@ Release/
 .cproject
 .mxproject
 .project
-*.ld
-*.ioc
+
