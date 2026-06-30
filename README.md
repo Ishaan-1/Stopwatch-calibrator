@@ -1,37 +1,61 @@
 # STM32 Blue Pill Stopwatch
 
-A precision stopwatch built on the STM32F103C8 (Blue Pill) with a 1.3" SH1106 SPI OLED display.
+A precision stopwatch built on the STM32F103C8 (Blue Pill), with two display versions: an OLED build and a TFT build.
 
-## Features
-- H:MM:SS.mmm display format (millisecond precision)
-- Start / Stop / Reset / Lap via UART serial commands from laptop
+## Versions
+
+### `oled_version/` — SH1106 OLED Display
+- 1.3" SH1106 SPI OLED (128x64)
+- UART serial control from laptop (Python script)
 - Physical push buttons for standalone battery-powered use
-- Drift correction for crystal accuracy (~46 ppm measured)
-- Python control script with live laptop-side timer for drift comparison
+- H:MM:SS.mmm display format (millisecond precision)
+- Drift correction for crystal accuracy (~31 ppm measured)
+
+### `tft_version/` — ILI9341 TFT Display
+- 2.4" ILI9341 SPI TFT (240x320, landscape mode)
+- Interrupt-driven (EXTI) button handling — Start/Stop and Reset
+- Larger, more readable display with colour support
+- Battery powered via 1S LiPo + TP4056
+
+## Features (both versions)
+- Start / Stop / Reset / Lap functionality
+- Millisecond precision timing using `HAL_GetTick()`
+- Battery powered, standalone operation
 
 ## Hardware
-- STM32F103C8 Blue Pill
-- 1.3" SH1106 SPI OLED (128x64)
-- CH340 UART-to-TTL programmer
-- 1S LiPo + TP4056 charging module
 
-## Serial Commands
+### OLED Version
+| Component | Spec |
+|---|---|
+| MCU | STM32F103C8 Blue Pill |
+| Display | 1.3" SH1106 SPI OLED |
+| Programmer | CH340 UART-to-TTL |
+| Power | 1S LiPo + TP4056 |
+
+### TFT Version
+| Component | Spec |
+|---|---|
+| MCU | STM32F103C8 Blue Pill |
+| Display | 2.4" ILI9341 SPI TFT |
+| Buttons | 2x tactile push buttons (interrupt-driven) |
+| Power | 1S LiPo + TP4056 |
+
+## Serial Commands (OLED version only)
 | Command | Action |
 |---------|--------|
 | `s` | Start / Stop |
 | `r` | Reset |
 | `l` | Lap |
 
-## Wiring
-| OLED Pin | Blue Pill Pin |
-|----------|---------------|
-| SCK | PA5 |
-| SDA | PA7 |
-| RES | PA2 |
-| DC  | PA3 |
-| CS  | PA4 |
-
 ## Built With
 - STM32CubeIDE
-- afiskon/stm32-ssd1306 library
-- Python + pyserial
+- [afiskon/stm32-ssd1306](https://github.com/afiskon/stm32-ssd1306) (OLED version)
+- [martnak/STM32-ILI9341](https://github.com/martnak/STM32-ILI9341) (TFT version)
+- Python + pyserial (OLED version control script)
+
+## Accuracy
+Measured crystal drift on the OLED version: ~31 ppm over a 6 hour test run, translating to roughly 112ms drift per hour. Software drift correction applied in firmware.
+
+## Roadmap
+- [ ] Rubidium oscillator integration for sub-ppb timing accuracy
+- [ ] Battery level indicator on TFT display
